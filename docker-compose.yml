@@ -1,0 +1,57 @@
+volumes:
+  db-data:
+
+services:
+  filament-php-cli: # Web server for remote debug on PhpStorm.
+    build: ./docker
+    volumes:
+      - ./src:/var/www/html/
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+    working_dir: /var/www/html
+    container_name: filament-php-cli
+    depends_on:
+      - filament-db
+    restart: always
+
+  filament-web:
+    build: ./docker
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/html/
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+    working_dir: /var/www/html
+    container_name: filament-web
+    depends_on:
+      - filament-db
+    restart: always
+
+  filament-db:
+    image: postgres:16.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/postgresql/data:/var/lib/postgresql/data
+      - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment: # Set the postgres user name, password and database name.
+      POSTGRES_USER: default
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: devdb
+    hostname: postgres
+    container_name: filament-db
+    restart: always
+
+  filament-pgadmin4:
+    image: dpage/pgadmin4:9.8
+    ports:
+        - 8000:80
+    volumes:
+        - ./docker/pgadmin4:/var/lib/pgadmin
+    environment: # Set the login information of pgAdmin 4.
+        PGADMIN_DEFAULT_EMAIL: root@example.com
+        PGADMIN_DEFAULT_PASSWORD: root
+    hostname: pgadmin4
+    container_name: filament-pgadmin4
+    depends_on:
+      - filament-db
+    restart: always
