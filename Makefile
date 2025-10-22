@@ -16,6 +16,8 @@ build:
 	docker compose build --no-cache --force-rm
 up:
 	docker compose up -d
+Up:
+    docker-compose up -d filament-php-cli filament-web
 down:
 	docker compose down
 ps:
