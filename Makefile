@@ -2,13 +2,13 @@ install:
 	@make clean
 	@make build
 	@make up
-	docker compose exec app composer install
-	docker compose exec app npm install
-	docker compose exec app npm run build
-	docker compose exec app cp .env.example .env
-	docker compose exec app php artisan key:generate
-	docker compose exec app php artisan storage:link
-	docker compose exec app chmod -R 777 storage bootstrap/cache
+	docker compose exec filament-web composer install
+	docker compose exec filament-web npm install
+	docker compose exec filament-web npm run build
+	docker compose exec filament-web cp .env.example .env
+	docker compose exec filament-web php artisan key:generate
+	docker compose exec filament-web php artisan storage:link
+	docker compose exec filament-web chmod -R 777 storage bootstrap/cache
 	@make fresh
 clean:
 	docker compose down --rmi all --volumes --remove-orphans
@@ -21,8 +21,8 @@ down:
 ps:
 	docker compose ps
 fresh:
-	docker compose exec web php artisan migrate:fresh --seed
+	docker compose exec filament-web php artisan migrate:fresh --seed
 web:
-	docker compose exec web bash
+	docker compose exec filament-web bash
 sql:
-	docker compose exec web bash -c 'psql -h postgres -p 5432 -d postgres -U default'
+	docker compose exec filament-web bash -c 'psql -h filament-db -p 5432 -d devdb -U default'

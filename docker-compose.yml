@@ -5,7 +5,7 @@ services:
   filament-php-cli: # Web server for remote debug on PhpStorm.
     build: ./docker
     volumes:
-      - ./src:/var/www/html/
+      - ./src/laravel-filament:/var/www/html/
       - ./docker/php.ini:/usr/local/etc/php/php.ini
     working_dir: /var/www/html
     container_name: filament-php-cli
@@ -18,7 +18,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./src:/var/www/html/
+      - ./src/laravel-filament:/var/www/html/
       - ./docker/php.ini:/usr/local/etc/php/php.ini
     working_dir: /var/www/html
     container_name: filament-web
